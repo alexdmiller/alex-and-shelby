@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -11,15 +12,20 @@
   <video id="myVideo" controls muted loop autoplay style="display: none;">
     <source src="tiny.mov" type="video/mp4" />
   </video>
-  <br>
+
+  <p>Hello</p>
 
   <canvas id="myCanvas" width="200" height="200"></canvas>
+
+  <!-- <div id="message">Shelby & Alex</div> -->
 
   <script id="shader-fs" type="x-shader/x-fragment">
   precision mediump float;
 
   uniform sampler2D uSampler;
-  uniform vec2 size;
+
+  uniform vec2 originalSize;
+  uniform vec2 renderSize;
 
   mat4 brightnessMatrix( float brightness )
   {
@@ -169,7 +175,7 @@
       if (index == 63) limit = 0.34375;
     }
 
-    return brightness < limit ? 0.0 : 1.0;
+    return brightness < limit ? 0. : 1.;
   }
 
   vec3 dither8x8(vec2 position, vec3 color) {
@@ -179,18 +185,20 @@
   }
 
   void main(void) {
-    vec2 normalized = gl_FragCoord.xy / size;
+    vec2 normalized = gl_FragCoord.xy / renderSize;
     vec3 lum = vec3(0.299, 0.587, 0.114);
-    vec4 sample = texture2D(uSampler, vec2(normalized.x * 0.5 + 0.5, normalized.y * 0.5 + 0.5));
-    sample = brightnessMatrix(0.1) * contrastMatrix(1.0) * saturationMatrix(1.0) * sample;
+    vec4 sample = texture2D(uSampler, vec2(normalized.x, normalized.y));
 
-    vec3 d = dither8x8(gl_FragCoord.xy, sample.rgb);
+    // SHELBY LOOK HERE
+    // sample = brightnessMatrix(1.0) * saturationMatrix(5.0) * contrastMatrix(.3) * sample;
+    sample = saturationMatrix(5.0) * contrastMatrix(.3) * sample;
+
+    vec3 d = dither8x8(gl_FragCoord.xy / (renderSize/originalSize), sample.rgb);
 
     gl_FragColor = vec4(d, 1.) * sample;
   }
 
   </script>
-
 
   <!-- Vertex shader program -->
   <script id="shader-vs" type="x-shader/x-vertex">
@@ -206,13 +214,20 @@
     const canvas = document.getElementById('myCanvas');
     const gl = canvas.getContext("webgl");
     let attributes, uniforms, program;
+    let videoWidth, videoHeight;
 
     var v = document.getElementById("myVideo");
+
+    v.play();
+
     v.addEventListener("loadedmetadata", function (e) {
-      var width = this.videoWidth * 1;
-      var height = this.videoHeight * 1;
-      canvas.width = width;
-      canvas.height = height;
+      console.log("loaded!")
+      videoWidth = this.videoWidth;
+      videoHeight = this.videoHeight;
+
+      // TODO: Why is the entire video not visible?
+      canvas.width = videoWidth * 6;
+      canvas.height = videoHeight * 6;
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -285,7 +300,7 @@
         fragmentShaderName: 'shader-fs',
         vertexShaderName: 'shader-vs',
         attributes: ['aVertexPosition'],
-        uniforms: ['size', 'uSampler'],
+        uniforms: ['renderSize', 'originalSize', 'uSampler'],
       });
 
       // some webGL initialization
@@ -342,6 +357,8 @@
       draw();
     }
 
+
+
     function draw() {
       var video = document.getElementById('myVideo');
 
@@ -358,7 +375,8 @@
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.uniform1i(uniforms['uSampler'], 0);
-        gl.uniform2f(uniforms['size'], canvas.width, canvas.height);
+        gl.uniform2f(uniforms['originalSize'], videoWidth, videoHeight);
+        gl.uniform2f(uniforms['renderSize'], canvas.width, canvas.height);
 
         //# Draw GPU
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, verticesIndexBuffer);
@@ -369,6 +387,33 @@
     }
 
   </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700');
+
+    :root {
+      font-family: 'Silkscreen', monospace;
+      color: white;
+      font-size: 50px;
+    }
+
+    * {
+      font-weight: 400;
+    }
+
+    #myCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -100;
+    }
+
+    #message {
+      color: white;
+      font-size: 30px;
+      font-style: italic;
+    }
+  </style>
 </body>
 
 </html>
