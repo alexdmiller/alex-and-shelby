@@ -1,0 +1,21 @@
+dithering:
+
+```
+# first generate a palette with number of colors
+ffmpeg -i bee-small.mov -vf "palettegen=max_colors=3" palette.png
+
+# then use palette to dither
+ffmpeg -i bee-small.mov  -i palette.png -lavfi paletteuse output.mov
+```
+
+scaling: 
+
+```
+ffmpeg -i bee-small.mov -vf "scale=512:-1" scaled.mov
+```
+
+pixelation:
+
+```
+ffmpeg -i scaled.mov -vf pixelize=4:4 output.mov
+```
