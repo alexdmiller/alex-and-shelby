@@ -10,14 +10,21 @@
 
 <body>
   <video id="myVideo" controls muted loop autoplay style="display: none;">
-    <source src="tiny.mov" type="video/mp4" />
+    <source src="tiny-4-slow.mp4" type="video/mp4" />
   </video>
 
-  <p>Celebrate our engagement!</p>
+  <main>
+    <h1>Alex &amp; Shelby<br/>are engaged!</h1>
+
+    <img src="/photo.png" alt="us!" />
+
+    <h2>Celebrate with us! <br />Sunday July 14, 2024 <br /> 4&ndash;6pm at <a
+        href="https://www.google.com/maps?sca_esv=16485b3b92093b39&biw=1469&bih=837&output=search&q=otherworld+wine+bar&source=lnms&entry=mc&ved=1t:200715&ictx=111"
+        target="_blank">Otherworld Wine Bar</a></h2>
+  </main>
 
   <canvas id="myCanvas" width="200" height="200"></canvas>
 
-  <!-- <div id="message">Shelby & Alex</div> -->
 
   <script id="shader-fs" type="x-shader/x-fragment">
   precision mediump float;
@@ -195,7 +202,11 @@
 
     vec3 d = dither8x8(gl_FragCoord.xy / (renderSize/originalSize), sample.rgb);
 
-    gl_FragColor = vec4(d, 1.) * sample;
+    if (d == vec3(0.)) {
+      gl_FragColor = vec4(0.2, 0.2, 0.8, 0.5) * sample;
+    } else {
+      gl_FragColor = vec4(d, 1.) * sample;
+    }
   }
 
   </script>
@@ -387,7 +398,6 @@
     }
 
   </script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700');
 
@@ -397,22 +407,42 @@
       font-size: 50px;
     }
 
-    body {
-      margin: 0;
-    }
-
     * {
       font-weight: 400;
+      box-sizing: border-box;
     }
 
-    p {
-      line-height: 90%;
-      font-size: 8vw;
-      margin: 0.25vw;
-      color: magenta;
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
-    #myCanvas {
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      font-style: normal;
+      font-size: 1.125rem;
+    }
+
+    h1,
+    h2 {
+      color: black;
+    }
+
+    a {
+      color: black;
+    }
+
+    img {
+      filter: grayscale(70%);
+    }
+
+    canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -424,6 +454,41 @@
       color: white;
       font-size: 30px;
       font-style: italic;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0 auto;
+      max-width: 1500px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    img {
+      width: 50vw;
+      max-width: 400px;
+    }
+
+    @media screen and (max-width: 800px) {
+      canvas {
+        width: 250%;
+      }
+
+      main {
+        padding: 0.5rem;
+      }
+
+      h1 {
+        font-size: 1rem;
+      }
+
+      h2 {
+        font-size: 0.75rem;
+      }
     }
   </style>
 </body>
