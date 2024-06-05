@@ -26,9 +26,9 @@
 
     <div class="rsvp">
       <canvas id="myCanvas" width="200" height="200"></canvas>
-      <a href="https://rsvp.link/cp5TH">RSVP</a>
+      <a href="https://rsvp.link/cp5TH" target="_blank">RSVP</a>
     </div>
-    
+
   </main>
 
   <script id="shader-fs" type="x-shader/x-fragment">
@@ -436,13 +436,16 @@
     }
 
     a {
+      line-height: 66%;
       color: black;
       text-decoration: none;
       border-bottom: 5px solid;
+      display: block;
+      margin-top: 0.5rem;
     }
 
     a:hover {
-      color: white;
+      color: #b1f436;
       text-decoration: none;
     }
 
@@ -511,7 +514,7 @@
       h2 {
         font-size: 0.75rem;
       }
-      
+
       h3 {
         font-size: 0.4375rem;
       }
