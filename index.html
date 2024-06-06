@@ -13,25 +13,25 @@
 
 <body>
   <video id="myVideo" controls muted loop autoplay style="display: none;">
-    <source src="tiny-5-slow-square.mov" type="video/mp4" />
+    <source src="tiny-5-slow-square-reencode.mov" type="video/mp4" />
   </video>
 
   <main>
-    <h1>Shelby and Alex are <span class="deco">engaged!</span></h1>
-
-    <img src="/photo.jpeg" alt="us!" />
-
+    <div class="title">
+      <h1>Shelby and Alex are engaged!</h1>
+      <canvas id="myCanvas" width="200" height="200"></canvas>
+    </div>
     <h2>Celebrate with us!</h2>
     <h3>Sunday July 14, 2024 <br /> 4&ndash;6pm </h3>
-    <h2><a
+    <h3><a
         href="https://www.google.com/maps?sca_esv=16485b3b92093b39&biw=1469&bih=837&output=search&q=otherworld+wine+bar&source=lnms&entry=mc&ved=1t:200715&ictx=111"
-        target="_blank">Otherworld Wine Bar</a></h2>
+        target="_blank">Otherworld Wine Bar</a></h3>
 
     <div class="rsvp">
-      <canvas id="myCanvas" width="200" height="200"></canvas>
       <a href="https://forms.gle/2eFYv1s9U88qHBBK6" target="_blank">RSVP</a>
     </div>
 
+    <img src="/photo.jpeg" alt="us!" />
   </main>
 
   <script id="shader-fs" type="x-shader/x-fragment">
@@ -439,11 +439,9 @@
     }
 
     a {
-      line-height: 66%;
       color: black;
       text-decoration: none;
       border-bottom: 5px solid;
-      display: inline-block;
       margin-top: 0.5rem;
     }
 
@@ -455,6 +453,7 @@
     img {
       width: 50vw;
       max-width: 600px;
+      margin-top: 100px;
     }
 
     canvas {
@@ -480,13 +479,25 @@
       position: relative;
       margin: 0 auto;
       max-width: 1500px;
-      padding: 1rem;
       text-align: center;
+      padding: 100px 0;
     }
 
     .rsvp {
       font-size: 2rem;
-      margin-top: 30px;
+      margin-top: 100px;
+    }
+
+    .rsvp a {
+      line-height: 66%;
+      color: black;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .rsvp a:hover {
+      color: #f13939;
+      text-decoration: none;
     }
 
     @media screen and (max-width: 800px) {
